@@ -28,12 +28,24 @@ export const authOptions = {
       const userData = await User.findOne({ email: session.user.email });
       session.user.name = userData?.name || session.user.name;
       session.user.username = userData?.username || "";
-      
+      session.user._id = userData?._id || "";
+
       return session;
     },
-    async jwt({ token, account }) {
+    async jwt({ user, token, account }) {
       if (account) {
         token.accessToken = account.access_token;
+      }
+      if (user) {
+        token._id = user._id; // Save the user's _id in the token
+      } else if (token?.email) {
+        // On subsequent sessions, fetch user info from the database using the email
+        await dbConnect();
+        const userData = await User.findOne({ email: token.email });
+
+        if (userData) {
+          token._id = userData._id; // Assign _id from the user in the database
+        }
       }
       return token;
     },

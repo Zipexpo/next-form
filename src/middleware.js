@@ -13,6 +13,17 @@ export async function middleware(req) {
       return NextResponse.redirect(signInUrl);
     }
   }
+  // Add userID from token to the request headers
+  console.log("token-middle");
+  console.log(token);
+  const userId = token?._id; // `sub` usually contains the user ID in JWT tokens
+  console.log(userId);
+  const modifiedRequest = NextResponse.next();
 
-  return NextResponse.next(); // Allow request to continue
+  // Append userID to the headers
+  modifiedRequest.headers.set("user-id", userId);
+  console.log(userId);
+  return modifiedRequest;
+
+  // return NextResponse.next(); // Allow request to continue
 }
