@@ -9,7 +9,7 @@ export default function CollectionEditor({id}){
     const handleSubmit = async (e) => {
         e.preventDefault();
     
-        const response = await fetch(`/api/collections/${id}`, {
+        const response = await fetch(`/api/collection/${id}`, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
@@ -18,7 +18,7 @@ export default function CollectionEditor({id}){
         });
     
         if (response.ok) {
-          router.push("/collections"); // Redirect to collections list after saving
+          router.push("/collection"); // Redirect to collections list after saving
         } else {
           console.error("Failed to update collection");
         }

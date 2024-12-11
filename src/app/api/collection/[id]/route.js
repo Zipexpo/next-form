@@ -1,10 +1,11 @@
 import { NextResponse } from "next/server";
-import dbConnect from "@/lib/dbConnect";
 import Collection from "@/models/Collection";
+import dbConnect from "@/lib/mongodb";
+import { checkAuth } from "@/lib/utils_server";
 
 // GET: Fetch a specific collection by ID
 export async function GET(req, { params }) {
-  const { id } = params;
+  const { id } = await params;
   await dbConnect();
 
   try {
@@ -20,7 +21,7 @@ export async function GET(req, { params }) {
 
 // PUT: Update a collection by ID
 export async function PUT(req, { params }) {
-  const { id } = params;
+  const { id } = await params;
   await dbConnect();
 
   try {
