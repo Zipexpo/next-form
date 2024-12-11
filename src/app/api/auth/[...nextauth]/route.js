@@ -17,7 +17,7 @@ export const authOptions = {
       const { email, name } = user;
       // Check if the user exists in your database
       await findOrCreateUser({ email, name });
-
+      
       return true; // Allow the sign-in to proceed if the user exists
     },
 

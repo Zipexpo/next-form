@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-export function checkAuth(req) {
+export function checkAuth(req,returnResult={}) {
   const userId = req.headers.get("user-id");
 
   if (!userId) {
@@ -9,5 +9,5 @@ export function checkAuth(req) {
       { status: 400 }
     );
   }
-  return userId;
+  returnResult.userId = userId;
 }

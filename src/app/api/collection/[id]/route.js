@@ -24,30 +24,34 @@ export async function PUT(req, { params }) {
   await dbConnect();
 
   try {
-    const userId = checkAuth(req);
-    const { label } = await req.json();
-    const collection = await Collection.findById(id);
+    const result = {};
+    checkAuth(req,result);
+    const {userID} = result;
+    if (userID){
+      const { label } = await req.json();
+      const collection = await Collection.findById(id);
 
-    if (!collection) {
-      return NextResponse.json(
-        { success: false, message: "Collection not found" },
-        { status: 404 }
-      );
-    }
-    if (collection.user.toString() !== userId) {
-      return NextResponse.json(
-        {
-          success: false,
-          message: "You do not have permission to update this collection",
-        },
-        { status: 403 }
-      );
-    }
-    // Update the collection
-    collection.label = label;
-    await collection.save();
+      if (!collection) {
+        return NextResponse.json(
+          { success: false, message: "Collection not found" },
+          { status: 404 }
+        );
+      }
+      if (collection.user.toString() !== userId) {
+        return NextResponse.json(
+          {
+            success: false,
+            message: "You do not have permission to update this collection",
+          },
+          { status: 403 }
+        );
+      }
+      // Update the collection
+      collection.label = label;
+      await collection.save();
 
-    return NextResponse.json({ success: true, collection: collection });
+      return NextResponse.json({ success: true, collection: collection });
+    }
   } catch (error) {
     return NextResponse.json(
       { success: false, error: error.message },

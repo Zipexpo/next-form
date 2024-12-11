@@ -6,18 +6,22 @@ import { NextResponse } from "next/server";
 export async function POST(req) {
   await dbConnect();
   try {
-    const userId = checkAuth(req);
-    const { label = "Untitled Collection" } = await req.json();
+    const result = {};
+    checkAuth(req,result);
+    const {userID} = result;
+    if (userID){
+      const { label = "Untitled Collection" } = await req.json();
 
-    const newCollection = await Collection.create({
-      label,
-      user: userId,
-    });
+      const newCollection = await Collection.create({
+        label,
+        user: userId,
+      });
 
-    return NextResponse.json({
-      success: true,
-      collectionId: newCollection._id,
-    });
+      return NextResponse.json({
+        success: true,
+        collectionId: newCollection._id,
+      });
+    }
   } catch (error) {
     console.error("Error creating collection:", error);
     return NextResponse.json(
