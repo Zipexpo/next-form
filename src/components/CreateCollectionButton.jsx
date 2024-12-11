@@ -19,7 +19,7 @@ const CreateCollectionButton = ({ userId }) => {
     if (response.ok) {
       const { collectionId } = await response.json();
       // Redirect to the edit page for the new collection
-      router.push(`/manage-form/${collectionId}/edit`);
+      router.push(`/manage-form/${collectionId}`);
     } else {
       console.error("Failed to create collection");
     }
