@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import Collection from "@/models/Collection";
+import Question from "@/models/Question";
 import dbConnect from "@/lib/mongodb";
 import { checkAuth } from "@/lib/utils_server";
 
@@ -9,7 +10,7 @@ export async function GET(req, { params }) {
   await dbConnect();
 
   try {
-    const collection = await Collection.findById(id).populate("user");
+    const collection = await Collection.findById(id).populate("user").populate("questions");
     return NextResponse.json({ success: true, collection });
   } catch (error) {
     return NextResponse.json(
