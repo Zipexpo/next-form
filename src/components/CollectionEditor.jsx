@@ -25,10 +25,10 @@ export default function CollectionEditor({id}){
               if (!response.ok) {
                 throw new Error("Failed to fetch data");
               }
-              const data = await response.json();
-              setExistingData(data);
+              const {collection} = await response.json();
+              setExistingData(collection);
               // Set default values in the form
-              Object.entries(data).forEach(([key, value]) => {
+              Object.entries(collection).forEach(([key, value]) => {
                 setValue(key, value);
               });
               setLoading(false);
@@ -74,7 +74,7 @@ export default function CollectionEditor({id}){
             <div>
             <label>Questions</label>
             <ul>
-                {existingData.questions.map((_, index) => (
+                {(existingData.questions??[]).map((_, index) => (
                 <li key={index}>
                     <div>
                     <label htmlFor={`questions.${index}.question_header`}>
