@@ -24,8 +24,8 @@ export async function PUT(req, { params }) {
   await dbConnect();
 
   try {
-    const userID = checkAuth(req);
-    if (userID){
+    const userId = checkAuth(req);
+    if (userId){
       const { label } = await req.json();
       const collection = await Collection.findById(id);
 
