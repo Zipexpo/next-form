@@ -24,9 +24,7 @@ export async function PUT(req, { params }) {
   await dbConnect();
 
   try {
-    const result = {};
-    checkAuth(req,result);
-    const {userID} = result;
+    const userID = checkAuth(req);
     if (userID){
       const { label } = await req.json();
       const collection = await Collection.findById(id);
@@ -51,6 +49,11 @@ export async function PUT(req, { params }) {
       await collection.save();
 
       return NextResponse.json({ success: true, collection: collection });
+    }else{
+      return NextResponse.json(
+        { success: false, message: "UserID is missing in headers" },
+        { status: 400 }
+      );
     }
   } catch (error) {
     return NextResponse.json(

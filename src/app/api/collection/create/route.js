@@ -6,10 +6,8 @@ import { NextResponse } from "next/server";
 export async function POST(req) {
   await dbConnect();
   try {
-    const result = {};
-    checkAuth(req,result);
-    const {userID} = result;
-    if (userID){
+    const userId = checkAuth(req);
+    if (userId){
       const { label = "Untitled Collection" } = await req.json();
 
       const newCollection = await Collection.create({
@@ -21,6 +19,11 @@ export async function POST(req) {
         success: true,
         collectionId: newCollection._id,
       });
+    }else{
+      return NextResponse.json(
+        { success: false, message: "UserID is missing in headers" },
+        { status: 400 }
+      );
     }
   } catch (error) {
     console.error("Error creating collection:", error);
